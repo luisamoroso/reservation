@@ -16,20 +16,52 @@
       </v-row>
     </v-alert>
     <v-row v-show="this.reservationMessage">
-      <v-row class="text-center">
-        <v-col class="mb-4">
-          <h1 class="grey--text text--darken-2 display-2">Danke für Ihre Reservierung</h1>
-          <h2>
-            Am {{ this.formatReservationDate() }} um {{ this.reservationTime }} für
-            {{ this.reservationQty }} Gäste
-          </h2>
-        </v-col>
-      </v-row>
+      <v-col>
+        <h2>Reservierungsbestätigung</h2>
+        <h3 class="grey--text text--darken-2">Vielen Dank für Ihre Reservierung!</h3>
+        <br />
+        <v-card max-width="344" class="mx-auto">
+          <v-card-title>Ihre Reservierung</v-card-title>
+          <v-card-text>
+            <div class="text--primary">
+              <span class="font-weight-bold">Name:&nbsp;</span>
+              {{ this.firstname }}&nbsp; {{ this.lastname }}
+            </div>
+            <div class="text--primary">
+              <span class="font-weight-bold">Datum:&nbsp;</span>
+              {{ this.formatReservationDate() }}
+            </div>
+            <div class="text--primary">
+              <span class="font-weight-bold">Uhrzeit:&nbsp;</span>
+              {{ this.reservationTime }}
+            </div>
+            <div class="text--primary">
+              <span class="font-weight-bold">Anzahl der Personen:&nbsp;</span>
+              {{ this.reservationQty }}
+            </div>
+            <div class="text--primary">
+              <span class="font-weight-bold">Anmerkung:&nbsp;</span>
+              {{ this.comment }}
+            </div>
+          </v-card-text>
+        </v-card>
+        <br />
+        <div>
+          <p>Wir freuen uns, Sie bald bei uns begrüßen zu dürfen. Wir schicken Ihnen in Kürze eine Reservierungsbestätigung an die von Ihnen angegebene E-Mail Adresse zu.</p>
+          <p>
+            Sollten Sie innerhalb von 24 Stunden keine Bestätigung erhalten, kontaktieren Sie uns bitte telefonisch oder per WhatsApp unter der Nummer
+            <a
+              class="font-weight-bold"
+              href="tel:+491785272501"
+            >+491785272501</a>.
+          </p>
+        </div>
+      </v-col>
     </v-row>
 
     <v-row class="text-center" v-show="!this.reservationMessage">
       <v-col class="mb-4">
-        <h1 class="grey--text text--darken-2 display-2">Jetzt reservieren</h1>
+        <h1 class="grey--text text--darken-2">Jetzt reservieren</h1>
       </v-col>
     </v-row>
     <v-alert
@@ -95,8 +127,11 @@
                 icon="mdi-phone"
                 border="left"
               >
-                Vestibulum ullamcorper mauris at ligula. Nulla porta dolor.
-                Vestibulum facilisis.
+                Bei Reservierungen über 8 Personen kontaktieren Sie uns bitte telefonisch oder per WhatsApp unter der Nummer
+                <a
+                  class="font-weight-bold"
+                  href="tel:+491785272501"
+                >+491785272501</a>
               </v-alert>
 
               <v-row>
@@ -118,7 +153,7 @@
               <v-row justify="space-around">
                 <v-date-picker
                   v-model="reservationDate"
-                  :min="currentDate"
+                  :min="startDate"
                   :max="maxDate"
                   :allowed-dates="allowedDates"
                   :color="brandColor"
@@ -134,7 +169,7 @@
                   <v-btn text @click="reservationStep = 1">Zurück</v-btn>
                 </v-col>
                 <v-col cols="6" align="end">
-                  <v-btn :color="brandColor" @click="goToStep3()">
+                  <v-btn :color="brandColor" @click="goToStep3()" :disabled="isMonday()">
                     <span class="white--text">Weiter</span>
                   </v-btn>
                 </v-col>
@@ -182,10 +217,10 @@
 
             <v-stepper-content step="4">
               <div class="headline">Reservierung abschließen</div>
-              <h3 align="center">
+              <v-alert outlined color="grey darken-3">
                 Am {{this.formatReservationDate()}} um {{ this.reservationTime }} für
                 {{ this.reservationQty }} Personen
-              </h3>
+              </v-alert>
 
               <v-form ref="form" v-model="valid" :lazy-validation="lazy">
                 <v-select
@@ -223,7 +258,7 @@
                   :rules="telephoneRules"
                   :color="brandColor"
                 ></v-text-field>
-                <!--
+
                 <v-text-field
                   v-model="email"
                   :rules="emailRules"
@@ -231,7 +266,7 @@
                   required
                   :color="brandColor"
                 ></v-text-field>
-                -->
+
                 <v-textarea
                   v-model="comment"
                   name="comment"
@@ -245,13 +280,46 @@
                 <v-checkbox
                   v-model="privacy"
                   :rules="[(v) => !!v || '']"
-                  label="Ich stimme Porto Elia Impressum und Datenschutzrichtlinen zu"
                   required
                   :color="brandColor"
-                ></v-checkbox>
+                >
+                  <template v-slot:label>
+                    <div>
+                      Ich stimme die
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <a
+                            target="_blank"
+                            href="https://www.porto-elia.net/impressum/"
+                            @click.stop
+                            v-on="on"
+                          >allgemeine Geschäftsbedingungen</a>
+                        </template>
+                        Opens in new window
+                      </v-tooltip>&nbsp;und die
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <a
+                            target="_blank"
+                            href="https://www.porto-elia.net/j/privacy"
+                            @click.stop
+                            v-on="on"
+                          >Datenschutzrichtlinien</a>
+                        </template>
+                        Opens in new window
+                      </v-tooltip>&nbsp;zu.
+                    </div>
+                  </template>
+                </v-checkbox>
 
                 <v-row justify="space-around">
-                  <v-btn color="amber" x-large @click="validate">
+                  <v-btn
+                    color="amber"
+                    x-large
+                    @click="validate"
+                    :loading="loading"
+                    :disabled="loading"
+                  >
                     <span class="white--text">Jetz reservieren</span>
                   </v-btn>
                 </v-row>
@@ -277,7 +345,7 @@ export default {
     return {
       brandColor: "light-green darken-2",
       reservationStep: 1,
-      editableStep: true,
+      editableStep: false,
       reservationQty: "2",
       reservationQtyOptions: [
         { text: "1", value: "1" },
@@ -290,9 +358,9 @@ export default {
         { text: "8", value: "8" },
         { text: "mehr", value: "more" }
       ],
-      reservationDate: this.setCurrentDate(),
-      currentDate: this.setCurrentDate(),
-      maxDate: this.setMaxDate(),
+      reservationDate: this.getStartDate(),
+      startDate: this.getStartDate(),
+      maxDate: this.getMaxDate(),
       availableDates: [],
       reservationTime: "17:00",
       timeItems: {
@@ -371,18 +439,26 @@ export default {
         v => (v && v.length <= 50) || "Der Name ist zu lang"
       ],
       telephone: "",
-      telephoneRules: [v => !!v || "Bitte geben Sie eine Telefonnummer ein"],
+      telephoneRules: [
+        v => !!v || "Bitte geben Sie eine Telefonnummer ein",
+        v =>
+          (v && v.length > 5) ||
+          "Bitte geben Sie eine gültige Telefonnummer ein",
+        v =>
+          (v && v.length < 20) ||
+          "Bitte geben Sie eine gültige Telefonnummer ein"
+      ],
       email: "",
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+        v => !!v || "Bitte geben Sie eine E-mail Adresse ein",
+        v => /.+@.+\..+/.test(v) || "Bitte geben Sie eine E-mail Adresse ein"
       ],
       comment: "",
       privacy: false,
       lazy: false,
       reservationMessage: false,
       errorMessage: false,
-      info: null
+      loading: false
     };
   },
   computed: {
@@ -415,10 +491,15 @@ export default {
       this.availableDates = availableDates;
       this.allowedDates();
     },
-    setCurrentDate: function() {
-      return moment().format("YYYY-MM-DD");
+    isMonday: function() {
+      return moment(this.reservationDate).day() === 1;
     },
-    setMaxDate: function() {
+    getStartDate: function() {
+      return moment()
+        .add(1, "d")
+        .format("YYYY-MM-DD");
+    },
+    getMaxDate: function() {
       return moment()
         .add(3, "M")
         .format("YYYY-MM-DD");
@@ -446,10 +527,12 @@ export default {
     validate() {
       const isValid = this.$refs.form.validate();
       if (isValid) {
+        //this.reservationMessage = true;
         this.addReservation();
       }
     },
     addReservation: function() {
+      this.loading = true;
       const data = {
         quantity: this.reservationQty,
         date: this.reservationDate,
@@ -458,19 +541,27 @@ export default {
         firstname: this.firstname,
         lastname: this.lastname,
         telephone: this.telephone,
+        email: this.email,
         comment: this.comment,
         privacy: this.privacy
       };
       axios
-        .post("/ReservationForm.php", data)
+        .post("index.php/home/reservation", data)
         .then(response => {
-          console.log(response);
-          this.reservationMessage = true;
-          this.errorMessage = false;
+          const data = response.data;
+          if (data.success) {
+            this.reservationMessage = true;
+            this.errorMessage = false;
+          } else {
+            this.reservationMessage = false;
+            this.errorMessage = true;
+          }
+          this.loading = false;
         })
         .catch(error => {
           this.reservationMessage = false;
           this.errorMessage = true;
+          this.loading = false;
           console.log(error);
         });
     },

@@ -10,14 +10,23 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link to="/impressum">
+          <v-list-item-action>
+            <v-icon>mdi-bookshelf</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Impressum</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <!--
         <v-list-item link to="/contact">
           <v-list-item-action>
-            <v-icon>mdi-phone</v-icon>
+            <v-icon>mdi-bookshelf</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Contact</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item>-->
       </v-list>
     </v-navigation-drawer>
 
@@ -33,14 +42,7 @@
     </v-main>
 
     <v-footer absolute :color="brandColor" app>
-      <span class="white--text">
-        &copy; {{ new Date().getFullYear() }}
-        <a
-          class="white--text"
-          href="//www.porto-elia.net/impressum/"
-          target="_blank"
-        >Impressum und Datenschutz</a>
-      </span>
+      <span class="white--text">&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
