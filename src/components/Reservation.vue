@@ -68,9 +68,29 @@
       type="error"
       v-if="this.errorMessage"
     >Ein Fehler ist aufgetretten. Bitte versuchen Sie es später erneut!</v-alert>
+    <v-row>
+      <v-col>
+        <v-alert outlined color="grey darken-2" v-if="this.reservationStep == 4">
+          <div class="title">Ihre Reservierung</div>
+          <div>
+            <b>Datum:</b>
+            {{this.formatReservationDate()}}
+          </div>
+          <div>
+            <b>Uhrzeit:</b>
+            {{ this.reservationTime }}
+          </div>
+          <div>
+            <b>Anzahl der Personen:</b>
+            {{ this.reservationQty }}
+          </div>
+        </v-alert>
+      </v-col>
+    </v-row>
     <v-row v-show="!this.reservationMessage">
       <v-col>
         <v-stepper v-model="reservationStep">
+          <!--
           <v-stepper-header>
             <v-stepper-step
               :complete="reservationStep > 1"
@@ -106,18 +126,21 @@
               :editable="editableStep"
             >Reservierung</v-stepper-step>
           </v-stepper-header>
-
+          -->
           <v-stepper-items>
             <v-stepper-content step="1">
               <div class="headline">Anzahl der Personen auswählen</div>
               <br />
-
-              <v-select
-                v-model="reservationQty"
-                :items="reservationQtyOptions"
-                :item-color="brandColor"
-                :color="brandColor"
-              ></v-select>
+              <v-row>
+                <v-col cols="6">
+                  <v-select
+                    v-model="reservationQty"
+                    :items="reservationQtyOptions"
+                    :item-color="brandColor"
+                    :color="brandColor"
+                  ></v-select>
+                </v-col>
+              </v-row>
 
               <v-alert
                 v-if="reservationQty === 'more'"
@@ -138,10 +161,12 @@
                 <v-col cols="12" align="end">
                   <v-btn
                     :color="brandColor"
-                    @click="reservationStep = 2"
+                    @click="goToStep2()"
                     :disabled="reservationQty === 'more'"
+                    dark
                   >
-                    <span class="white--text">Weiter</span>
+                    Weiter
+                    <v-icon right>mdi-arrow-right</v-icon>
                   </v-btn>
                 </v-col>
               </v-row>
@@ -166,11 +191,14 @@
 
               <v-row>
                 <v-col cols="6">
-                  <v-btn text @click="reservationStep = 1">Zurück</v-btn>
+                  <v-btn text @click="reservationStep = 1">
+                    <v-icon left>mdi-arrow-left</v-icon>Zurück
+                  </v-btn>
                 </v-col>
                 <v-col cols="6" align="end">
-                  <v-btn :color="brandColor" @click="goToStep3()" :disabled="isMonday()">
-                    <span class="white--text">Weiter</span>
+                  <v-btn :color="brandColor" @click="goToStep3()" :disabled="isMonday()" dark>
+                    Weiter
+                    <v-icon right>mdi-arrow-right</v-icon>
                   </v-btn>
                 </v-col>
               </v-row>
@@ -205,11 +233,14 @@
 
               <v-row>
                 <v-col cols="6">
-                  <v-btn text @click="reservationStep = 2">Zurück</v-btn>
+                  <v-btn text @click="reservationStep = 2">
+                    <v-icon left>mdi-arrow-left</v-icon>Zurück
+                  </v-btn>
                 </v-col>
                 <v-col cols="6" align="end">
-                  <v-btn :color="brandColor" @click="reservationStep = 4">
-                    <span class="white--text">Weiter</span>
+                  <v-btn :color="brandColor" @click="goToStep4()" dark>
+                    Weiter
+                    <v-icon right>mdi-arrow-right</v-icon>
                   </v-btn>
                 </v-col>
               </v-row>
@@ -217,11 +248,6 @@
 
             <v-stepper-content step="4">
               <div class="headline">Reservierung abschließen</div>
-              <v-alert outlined color="grey darken-3">
-                Am {{this.formatReservationDate()}} um {{ this.reservationTime }} für
-                {{ this.reservationQty }} Personen
-              </v-alert>
-
               <v-form ref="form" v-model="valid" :lazy-validation="lazy">
                 <v-select
                   v-model="salutation"
@@ -316,7 +342,7 @@
                   <v-btn
                     color="amber"
                     x-large
-                    @click="validate"
+                    @click="recaptcha"
                     :loading="loading"
                     :disabled="loading"
                   >
@@ -326,13 +352,22 @@
               </v-form>
               <br />
               <v-row>
-                <v-btn text @click="reservationStep = 3">Zurück</v-btn>
+                <v-btn text @click="reservationStep = 3">
+                  <v-icon left>mdi-arrow-left</v-icon>Zurück
+                </v-btn>
               </v-row>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
       </v-col>
     </v-row>
+    <div class="text-caption" v-if="this.reservationStep == 4">
+      This site is protected by reCAPTCHA and the Google
+      <a
+        href="https://policies.google.com/privacy"
+      >Privacy Policy</a> and
+      <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+    </div>
   </div>
 </template>
 
@@ -345,7 +380,7 @@ export default {
     return {
       brandColor: "light-green darken-2",
       reservationStep: 1,
-      editableStep: false,
+      editableStep: true,
       reservationQty: "2",
       reservationQtyOptions: [
         { text: "1", value: "1" },
@@ -495,18 +530,28 @@ export default {
       return moment(this.reservationDate).day() === 1;
     },
     getStartDate: function() {
-      return moment()
-        .add(1, "d")
-        .format("YYYY-MM-DD");
+      return moment().day() === 0
+        ? moment()
+            .add(2, "d")
+            .format("YYYY-MM-DD")
+        : moment()
+            .add(1, "d")
+            .format("YYYY-MM-DD");
     },
     getMaxDate: function() {
       return moment()
         .add(3, "M")
         .format("YYYY-MM-DD");
     },
+    goToStep2() {
+      this.reservationStep = 2;
+    },
     goToStep3() {
       this.reservationTime = this.getReservationTimeItems().perHour[0].value;
       this.reservationStep = 3;
+    },
+    goToStep4() {
+      this.reservationStep = 4;
     },
     getReservationTimeItems() {
       let items = {};
@@ -524,15 +569,21 @@ export default {
       }
       return items;
     },
-    validate() {
-      const isValid = this.$refs.form.validate();
-      if (isValid) {
-        //this.reservationMessage = true;
-        this.addReservation();
+    async recaptcha() {
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        // (optional) Wait until recaptcha has been loaded.
+        await this.$recaptchaLoaded();
+        // Execute reCAPTCHA with action "reservation".
+        const token = await this.$recaptcha("reservation");
+
+        if (token) {
+          this.addReservation();
+        }
+        this.loading = false;
       }
     },
     addReservation: function() {
-      this.loading = true;
       const data = {
         quantity: this.reservationQty,
         date: this.reservationDate,
@@ -556,12 +607,10 @@ export default {
             this.reservationMessage = false;
             this.errorMessage = true;
           }
-          this.loading = false;
         })
         .catch(error => {
           this.reservationMessage = false;
           this.errorMessage = true;
-          this.loading = false;
           console.log(error);
         });
     },

@@ -32,7 +32,7 @@
 
     <v-app-bar app color="light-green darken-2" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Porto Elia</v-toolbar-title>
+      <v-toolbar-title>Porto Elia Taverna</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
