@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 
     <v-alert prominent type="error">
       <v-row align="center">
         <v-col class="grow">
@@ -15,6 +16,7 @@
         </v-col>
       </v-row>
     </v-alert>
+    -->
     <v-row v-show="this.reservationMessage">
       <v-col>
         <h2>Reservierungsbestätigung</h2>
@@ -60,15 +62,15 @@
     </v-row>
 
     <v-row class="text-center" v-show="!this.reservationMessage">
-      <v-col class="mb-4">
-        <h1 class="grey--text text--darken-2">Jetzt reservieren</h1>
+      <v-col>
+        <h2 class="grey--text text--darken-2">Online Reservierung</h2>
       </v-col>
     </v-row>
     <v-alert
       type="error"
       v-if="this.errorMessage"
     >Ein Fehler ist aufgetretten. Bitte versuchen Sie es später erneut!</v-alert>
-    <v-row>
+    <v-row v-show="!this.reservationMessage">
       <v-col>
         <v-alert outlined color="grey darken-2" v-if="this.reservationStep == 4">
           <div class="title">Ihre Reservierung</div>
@@ -183,6 +185,7 @@
                   :allowed-dates="allowedDates"
                   :color="brandColor"
                   @update:picker-date="pickerUpdate($event)"
+                  first-day-of-week="1"
                   locale="de-de"
                   elevation="5"
                 ></v-date-picker>
@@ -283,6 +286,7 @@
                   required
                   :rules="telephoneRules"
                   :color="brandColor"
+                  hint="Unter Umständen kontaktieren wir Sie in Bezug auf diese Reservierung"
                 ></v-text-field>
 
                 <v-text-field
@@ -291,12 +295,14 @@
                   label="E-mail"
                   required
                   :color="brandColor"
+                  hint="Wir schicken Ihnen eine Bestätigungsemail an diese Adresse"
                 ></v-text-field>
 
                 <v-textarea
                   v-model="comment"
                   name="comment"
-                  label="Anmerkung (optional)"
+                  label="Extra Wünsche (optional)"
+                  placeholder="z.B. draußen essen"
                   rows="1"
                   :color="brandColor"
                   :counter="150"

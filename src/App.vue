@@ -18,21 +18,12 @@
             <v-list-item-title>Impressum</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <!--
-        <v-list-item link to="/contact">
-          <v-list-item-action>
-            <v-icon>mdi-bookshelf</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Contact</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>-->
       </v-list>
     </v-navigation-drawer>
 
     <v-app-bar app color="light-green darken-2" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Porto Elia Taverna</v-toolbar-title>
+      <v-toolbar-title link to="/">Porto Elia Taverna</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
