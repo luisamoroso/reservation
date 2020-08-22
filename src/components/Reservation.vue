@@ -1,22 +1,5 @@
 <template>
   <div>
-    <!-- 
-    <v-alert prominent type="error">
-      <v-row align="center">
-        <v-col class="grow">
-          <h2>Seite in Bearbeitung!</h2>
-          <span>
-            Reservierungen sind unter
-            <a
-              href="https://www.porto-elia.net/online-reservierungen/"
-              class="grey--text text--lighten-5 font-weight-bold"
-            >www.porto-elia.net</a>
-            möglich.
-          </span>
-        </v-col>
-      </v-row>
-    </v-alert>
-    -->
     <v-row v-show="this.reservationMessage">
       <v-col>
         <h2>Reservierungsbestätigung</h2>
@@ -63,7 +46,7 @@
 
     <v-row class="text-center" v-show="!this.reservationMessage">
       <v-col>
-        <h2 class="grey--text text--darken-2">Online Reservierung</h2>
+        <h1 class="grey--text text--darken-2">Online Reservierung</h1>
       </v-col>
     </v-row>
     <v-alert
@@ -92,43 +75,6 @@
     <v-row v-show="!this.reservationMessage">
       <v-col>
         <v-stepper v-model="reservationStep">
-          <!--
-          <v-stepper-header>
-            <v-stepper-step
-              :complete="reservationStep > 1"
-              step="1"
-              :color="brandColor"
-              :editable="editableStep"
-            >Anzahl der Personen</v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step
-              :complete="reservationStep > 2"
-              step="2"
-              :color="brandColor"
-              :editable="editableStep"
-            >Datum</v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step
-              :complete="reservationStep > 3"
-              step="3"
-              :color="brandColor"
-              :editable="editableStep"
-            >Uhrzeit</v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step
-              :complete="reservationStep > 4"
-              step="4"
-              :color="brandColor"
-              :editable="editableStep"
-            >Reservierung</v-stepper-step>
-          </v-stepper-header>
-          -->
           <v-stepper-items>
             <v-stepper-content step="1">
               <div class="headline">Anzahl der Personen auswählen</div>
@@ -286,7 +232,6 @@
                   required
                   :rules="telephoneRules"
                   :color="brandColor"
-                  hint="Unter Umständen kontaktieren wir Sie in Bezug auf diese Reservierung"
                 ></v-text-field>
 
                 <v-text-field
@@ -295,14 +240,14 @@
                   label="E-mail"
                   required
                   :color="brandColor"
-                  hint="Wir schicken Ihnen eine Bestätigungsemail an diese Adresse"
+                  hint="Wir schicken Ihnen eine Reservierungsbestätigung zu"
                 ></v-text-field>
 
                 <v-textarea
                   v-model="comment"
                   name="comment"
-                  label="Extra Wünsche (optional)"
-                  placeholder="z.B. draußen essen"
+                  label="Besondere Wünsche (optional)"
+                  hint="z.B. draußen essen"
                   rows="1"
                   :color="brandColor"
                   :counter="150"
@@ -317,7 +262,7 @@
                 >
                   <template v-slot:label>
                     <div>
-                      Ich stimme die
+                      Ich stimme den
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                           <a
@@ -325,10 +270,10 @@
                             href="https://www.porto-elia.net/impressum/"
                             @click.stop
                             v-on="on"
-                          >allgemeine Geschäftsbedingungen</a>
+                          >allgemeinen Geschäftsbedingungen</a>
                         </template>
                         Opens in new window
-                      </v-tooltip>&nbsp;und die
+                      </v-tooltip>&nbsp;und den
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                           <a
@@ -386,7 +331,6 @@ export default {
     return {
       brandColor: "light-green darken-2",
       reservationStep: 1,
-      editableStep: true,
       reservationQty: "2",
       reservationQtyOptions: [
         { text: "1", value: "1" },
