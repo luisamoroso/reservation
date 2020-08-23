@@ -1,17 +1,20 @@
 <template>
-  <div class="home">
-    <Reservation />
-  </div>
+  <v-container>
+    <Title title="Online Reservierung" />
+    <ReservationForm />
+  </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
-import Reservation from "@/components/Reservation.vue";
+import Title from "@/components/Title.vue";
+import ReservationForm from "@/components/ReservationForm.vue";
 
 export default {
   name: "Home",
   components: {
-    Reservation,
-  },
+    Title,
+    ReservationForm
+  }
 };
 </script>

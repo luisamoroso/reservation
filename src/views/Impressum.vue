@@ -1,8 +1,8 @@
 <template>
-  <div class="impressum">
+  <v-container>
+    <Title title="Impressum" />
     <v-row>
       <v-col>
-        <h1>Impressum</h1>
         <div>
           <h2>Angaben gemäß § 5 TMG:</h2>
 
@@ -96,5 +96,15 @@
         </div>
       </v-col>
     </v-row>
-  </div>
+  </v-container>
 </template>
+<script>
+import Title from "@/components/Title.vue";
+
+export default {
+  name: "Impressum",
+  components: {
+    Title
+  }
+};
+</script>
