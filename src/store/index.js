@@ -2,10 +2,15 @@ import Vue from "vue";
 import Vuex from "vuex";
 import moment from "moment";
 
+import { dateFormat } from "@/shared/constants";
+
 import {
   SET_QUANTITY,
   SET_DATE,
+  SET_DATEPICKER,
   SET_TIME,
+  SET_DATETIME,
+  UPDATE_TIME_ITEM,
   SET_CUSTOMER_FORM,
   SET_CONFIRMATION_PAGE,
   SET_SALUTATION,
@@ -20,8 +25,10 @@ Vue.use(Vuex);
 
 const state = {
   quantity: "2",
-  date: "",
-  time: "",
+  date: moment().format(dateFormat),
+  datetime: moment(),
+  datepicker: "2020-09-11",
+  time: "18:00",
   customerForm: false,
   confirmationPage: false,
   salutation: "Herr",
@@ -30,6 +37,7 @@ const state = {
   telephone: "",
   email: "",
   comment: "",
+  timeItems: [],
 };
 const mutations = {
   [SET_QUANTITY](state, payload) {
@@ -38,8 +46,17 @@ const mutations = {
   [SET_DATE](state, payload) {
     state.date = payload;
   },
+  [SET_DATETIME](state, payload) {
+    state.datetime = payload;
+  },
+  [SET_DATEPICKER](state, payload) {
+    state.datepicker = payload;
+  },
   [SET_TIME](state, payload) {
     state.time = payload;
+  },
+  [UPDATE_TIME_ITEM](state, payload) {
+    state.timeItems.push(payload);
   },
   [SET_CUSTOMER_FORM](state, payload) {
     state.customerForm = payload;
@@ -73,8 +90,17 @@ const actions = {
   setDateAction({ commit }, payload) {
     commit(SET_DATE, payload);
   },
+  setDatetimeAction({ commit }, payload) {
+    commit(SET_DATETIME, payload);
+  },
+  setDatepickerAction({ commit }, payload) {
+    commit(SET_DATEPICKER, payload);
+  },
   setTimeAction({ commit }, payload) {
     commit(SET_TIME, payload);
+  },
+  updateTimeItemAction({ commit }, timeItem) {
+    commit(UPDATE_TIME_ITEM, timeItem);
   },
   setCustomerFormAction({ commit }, payload) {
     commit(SET_CUSTOMER_FORM, payload);
@@ -104,6 +130,9 @@ const actions = {
 const getters = {
   getDateFormatted: (state) => {
     return moment(state.date).format("DD.MM.YYYY");
+  },
+  getDay: (state) => {
+    return moment(state.datetime).day();
   },
 };
 

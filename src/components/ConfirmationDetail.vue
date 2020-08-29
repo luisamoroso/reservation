@@ -45,13 +45,20 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
   name: "ConfirmationDetail",
   computed: {
     ...mapState(["quantity", "time", "firstname", "lastname", "comment"]),
     ...mapGetters(["getDateFormatted"])
+  },
+  methods: {
+    ...mapActions(["setCustomerFormAction", "setConfirmationPageAction"])
+  },
+  created() {
+    this.setCustomerFormAction(false);
+    this.setConfirmationPageAction(false);
   }
 };
 </script>

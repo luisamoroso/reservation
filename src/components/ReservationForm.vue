@@ -1,11 +1,12 @@
 <template>
   <div>
+    <DevSystem />
     <v-row>
       <!-- quantity section -->
       <v-col cols="12" sm="6" md="12">
         <v-select
           label="Anzahl der Personen auswählen"
-          @input="setQuantityAction"
+          @input="setQuantity"
           :items="quantityOptions"
           :value="quantity"
           :item-color="brandColor"
@@ -22,42 +23,45 @@
       </v-col>
       <!-- date section -->
       <v-col cols="12" sm="6" md="12" v-if="computedHideForm">
+        <!-- test dt -->
         <v-menu
+          ref="menu"
+          :close-on-content-click="false"
           v-model="menu"
-          nudge-right="40"
+          :nudge-right="40"
+          :return-value.sync="date"
           transition="scale-transition"
           offset-y
           min-width="290px"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              @input="computedActiveDate"
-              :value="getDateFormatted"
-              label="Datum auswählen"
+              slot="activator"
+              v-model="date"
+              label="Picker without buttons"
               prepend-icon="mdi-calendar"
-              readonly
               v-bind="attrs"
               v-on="on"
-              :color="brandColor"
             ></v-text-field>
           </template>
-          <v-date-picker
-            v-model="datepicker"
-            @input="menu = false"
-            :min="startDate"
-            :max="endDate"
-            :allowed-dates="allowedDates"
-            :color="brandColor"
-            @update:picker-date="pickerUpdate($event)"
-            first-day-of-week="1"
-            locale="de-de"
-            elevation="5"
-            no-title
-          ></v-date-picker>
+          <v-date-picker v-model="date" @input="$refs.menu.save(date);"></v-date-picker>
         </v-menu>
       </v-col>
 
       <!-- time section -->
+      <v-col cols="12" sm="6" md="12">
+        Time: {{time}}
+        <div v-for="timeItem in timeItems" :key="timeItem.value">
+          <v-btn
+            rounded
+            :color="timeItem.color"
+            dark
+            :outlined="timeItem.outlined"
+            @click="updateTime(timeItem)"
+          >{{timeItem.name}}</v-btn>
+        </div>
+      </v-col>
+      <!-- time section backup
       <v-col cols="12" sm="6" md="12" v-if="computedHideForm">
         <v-radio-group v-model="computedTime" label="Uhrzeit auswählen" prepend-icon="mdi-clock">
           <v-row>
@@ -81,13 +85,13 @@
             </v-col>
           </v-row>
         </v-radio-group>
-      </v-col>
+      </v-col>-->
     </v-row>
 
     <!-- Weiter button -->
     <v-row v-if="computedHideForm">
       <v-col align="center">
-        <v-btn :color="brandColor" @click="customerPage()" large dark>
+        <v-btn :color="brandColor" @click="customerPage()" x-large dark>
           Weiter
           <v-icon right>mdi-arrow-right</v-icon>
         </v-btn>
@@ -99,22 +103,58 @@
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import moment from "moment";
+import DevSystem from "@/components/DevSystem.vue";
 
 import {
   brandColor,
   dateFormat,
   timeItems,
-  qtyOptions
+  qtyOptions,
+  availability
 } from "@/shared/constants";
 
 export default {
   name: "ReservationForm",
+  components: {
+    DevSystem
+  },
+  created: function() {
+    const day = this.getDay;
+    let startTime = "";
+    switch (day) {
+      case 0:
+        startTime = availability.sunday.start;
+        break;
+      case 6:
+        startTime = availability.saturday.start;
+        break;
+
+      default:
+        startTime = availability.default.start;
+        break;
+    }
+    //let val = startTime;
+    let items = [];
+    for (let i = 0; i < 5; i++) {
+      let item = {
+        name: startTime,
+        value: startTime,
+        outlined: false,
+        color: "grey"
+      };
+      items.push(item);
+    }
+    console.log(items);
+    this.updateTimeItemAction(items);
+  },
   data() {
     return {
+      timeColor: "grey",
+      timeOutlined: true,
       brandColor: brandColor,
       quantityOptions: qtyOptions,
       menu: false,
-      datepicker: this.getStartDate(),
+      datepickers: "2020-09-12",
       startDate: this.getStartDate(),
       endDate: this.getEndDate(),
       availableDates: []
@@ -124,9 +164,22 @@ export default {
     ...mapActions([
       "setQuantityAction",
       "setDateAction",
+      "setDatetimeAction",
+      "setDatepickerAction",
       "setTimeAction",
+      "updateTimeItemAction",
       "setCustomerFormAction"
     ]),
+    updateTime(timeItem) {
+      this.setTimeAction(timeItem.value);
+      //this.updateTimeItemAction(timeItem);
+    },
+    setQuantity(val) {
+      this.setQuantityAction(val);
+      if (this.quantity === "more") {
+        this.setCustomerFormAction(false);
+      }
+    },
     allowedDates(a) {
       return this.availableDates.includes(a);
     },
@@ -184,25 +237,32 @@ export default {
     customerPage: function() {
       this.setCustomerFormAction(true);
       this.$router.push({
-        name: "Reservation",
-        params: { customerForm: this.customerForm }
+        name: "Reservation"
       });
     }
   },
   computed: {
-    ...mapState(["quantity", "date", "customerForm"]),
-    ...mapGetters(["getDateFormatted"]),
-    computedActiveDate() {
-      this.setDateAction(this.datepicker);
-      return this.datepicker;
-    },
-    computedTimeItems: function() {
-      return this.getTimeItems();
-    },
-    computedTime: function() {
-      const t = this.getTimeItems().perHour[0].value;
-      this.setTimeAction(t);
-      return t;
+    ...mapState([
+      "quantity",
+      "date",
+      "datepicker",
+      "customerForm",
+      "datetime",
+      "time",
+      "timeItems"
+    ]),
+    ...mapGetters(["getDateFormatted", "getDayFormatted"]),
+
+    date: {
+      get: function() {
+        //alert(this.$store.state.globalDate);
+        return this.$store.state.date;
+      },
+      set: function(newValue) {
+        //alert('computed date,set function: ' + newValue);
+        this.$store.commit("setDate", newValue);
+        //alert('computed date,set function after commit: ' + this.$store.state.globalDate);
+      }
     },
     computedHideForm: function() {
       return this.quantity !== "more";

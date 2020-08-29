@@ -33,7 +33,7 @@
           ></v-text-field>
 
           <v-text-field
-            @input="setLastname"
+            @input="setLastnameAction"
             :value="lastname"
             :counter="50"
             :rules="nameRules"
@@ -111,6 +111,11 @@
         </v-form>
       </v-col>
     </v-row>
+    <v-row>
+      <v-btn text @click="back">
+        <v-icon left>mdi-arrow-left</v-icon>Zurück
+      </v-btn>
+    </v-row>
   </div>
 </template>
 
@@ -171,7 +176,8 @@ export default {
       "setTelephoneAction",
       "setEmailAction",
       "setCommentAction",
-      "setConfirmationPageAction"
+      "setConfirmationPageAction",
+      "setCustomerFormAction"
     ]),
     async submit() {
       if (this.$refs.form.validate()) {
@@ -203,8 +209,7 @@ export default {
       console.log(data);
       this.setConfirmationPageAction(true);
       this.$router.push({
-        name: "Confirmation",
-        params: { confirmation: true }
+        name: "Confirmation"
       });
 
       /*
@@ -226,6 +231,10 @@ export default {
           this.errorMessage = true;
           console.log(error);
         });*/
+    },
+    back() {
+      this.setCustomerFormAction(false);
+      this.$router.back();
     }
   }
 };

@@ -1,7 +1,8 @@
-export const brandColor = "light-green darken-2";
-export const dateFormat = "YYYY-MM-DD";
+const brandColor = "light-green darken-2";
+const dateFormat = "YYYY-MM-DD";
+//const datetimeFormat = "YYYY-MM-DD";
 
-export const qtyOptions = [
+const qtyOptions = [
   { text: "1", value: "1" },
   { text: "2", value: "2" },
   { text: "3", value: "3" },
@@ -13,7 +14,7 @@ export const qtyOptions = [
   { text: "mehr", value: "more" },
 ];
 
-export const timeItems = {
+const timeItems = {
   saturday: {
     perHour: [
       { label: "16:00", value: "16:00" },
@@ -79,3 +80,17 @@ export const timeItems = {
     ],
   },
 };
+
+const availability = {
+  saturday: {
+    start: 1600,
+  },
+  sunday: {
+    start: 1300,
+  },
+  default: {
+    start: 1700,
+  },
+};
+
+export { brandColor, dateFormat, timeItems, availability, qtyOptions };
