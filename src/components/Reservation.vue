@@ -236,9 +236,7 @@
 
                 <v-text-field
                   v-model="email"
-                  :rules="emailRules"
                   label="E-mail"
-                  required
                   :color="brandColor"
                   hint="Wir schicken Ihnen eine Reservierungsbestätigung zu"
                 ></v-text-field>
@@ -435,7 +433,7 @@ export default {
       ],
       email: "",
       emailRules: [
-        v => !!v || "Bitte geben Sie eine E-mail Adresse ein",
+        v => !!v || "Bitte geben Sie eine E-mail Adresse ein (req)",
         v => /.+@.+\..+/.test(v) || "Bitte geben Sie eine E-mail Adresse ein"
       ],
       comment: "",
