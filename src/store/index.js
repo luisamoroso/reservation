@@ -2,15 +2,13 @@ import Vue from "vue";
 import Vuex from "vuex";
 import moment from "moment";
 
-import { dateFormat } from "@/shared/constants";
+import { dateFormat, TIME_OPTIONS } from "@/shared/constants";
 
 import {
   SET_QUANTITY,
   SET_DATE,
-  SET_DATEPICKER,
   SET_TIME,
-  SET_DATETIME,
-  UPDATE_TIME_ITEM,
+  UPDATE_TIME_OPTIONS,
   SET_CUSTOMER_FORM,
   SET_CONFIRMATION_PAGE,
   SET_SALUTATION,
@@ -25,10 +23,10 @@ Vue.use(Vuex);
 
 const state = {
   quantity: "2",
-  date: moment().format(dateFormat),
-  datetime: moment(),
-  datepicker: "2020-09-11",
-  time: "18:00",
+  startDate: initializeDate(),
+  date: initializeDate(),
+  time: initializeTime(),
+  timeOptions: TIME_OPTIONS,
   customerForm: false,
   confirmationPage: false,
   salutation: "Herr",
@@ -37,7 +35,6 @@ const state = {
   telephone: "",
   email: "",
   comment: "",
-  timeItems: [],
 };
 const mutations = {
   [SET_QUANTITY](state, payload) {
@@ -46,17 +43,13 @@ const mutations = {
   [SET_DATE](state, payload) {
     state.date = payload;
   },
-  [SET_DATETIME](state, payload) {
-    state.datetime = payload;
-  },
-  [SET_DATEPICKER](state, payload) {
-    state.datepicker = payload;
-  },
   [SET_TIME](state, payload) {
     state.time = payload;
   },
-  [UPDATE_TIME_ITEM](state, payload) {
-    state.timeItems.push(payload);
+  [UPDATE_TIME_OPTIONS](state, payload) {
+    console.log(payload);
+
+    //state.timeOptions = payload;
   },
   [SET_CUSTOMER_FORM](state, payload) {
     state.customerForm = payload;
@@ -90,17 +83,11 @@ const actions = {
   setDateAction({ commit }, payload) {
     commit(SET_DATE, payload);
   },
-  setDatetimeAction({ commit }, payload) {
-    commit(SET_DATETIME, payload);
-  },
-  setDatepickerAction({ commit }, payload) {
-    commit(SET_DATEPICKER, payload);
-  },
   setTimeAction({ commit }, payload) {
     commit(SET_TIME, payload);
   },
-  updateTimeItemAction({ commit }, timeItem) {
-    commit(UPDATE_TIME_ITEM, timeItem);
+  updateTimeOptionsAction({ commit }, timeOption) {
+    commit(UPDATE_TIME_OPTIONS, timeOption);
   },
   setCustomerFormAction({ commit }, payload) {
     commit(SET_CUSTOMER_FORM, payload);
@@ -128,13 +115,64 @@ const actions = {
   },
 };
 const getters = {
+  getEndDate: (state) => {
+    return moment(state.startDate)
+      .add(3, "M")
+      .format(dateFormat);
+  },
   getDateFormatted: (state) => {
     return moment(state.date).format("DD.MM.YYYY");
   },
-  getDay: (state) => {
-    return moment(state.datetime).day();
+  getTimeOptions: (state) => {
+    let options = [];
+    const day = moment(state.date).day();
+    switch (day) {
+      case 6:
+        options = TIME_OPTIONS.saturday;
+        // state.time = TIME_OPTIONS.saturday[0].value;
+        break;
+      case 0:
+        options = TIME_OPTIONS.sunday;
+        // state.time = TIME_OPTIONS.sunday[0].value;
+        break;
+      default:
+        options = TIME_OPTIONS.default;
+        // state.time = TIME_OPTIONS.default[0].value;
+        break;
+    }
+    return options;
   },
 };
+
+function initializeDate() {
+  const day = moment().day();
+  return day === 1
+    ? moment()
+        .add(2, "d")
+        .format(dateFormat)
+    : moment()
+        .add(1, "d")
+        .format(dateFormat);
+}
+
+function initializeTime() {
+  const day = moment(initializeDate()).day();
+  let time = "";
+  switch (day) {
+    case 6:
+      time = TIME_OPTIONS.saturday[0].value;
+      break;
+    case 0:
+      time = TIME_OPTIONS.sunday[0].value;
+      break;
+    default:
+      time = TIME_OPTIONS.default[0].value;
+      break;
+  }
+  console.log("initializeTime -> time", time);
+
+  return time;
+}
 
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== "production",

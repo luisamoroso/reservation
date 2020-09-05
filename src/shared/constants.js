@@ -1,6 +1,5 @@
 const brandColor = "light-green darken-2";
 const dateFormat = "YYYY-MM-DD";
-//const datetimeFormat = "YYYY-MM-DD";
 
 const qtyOptions = [
   { text: "1", value: "1" },
@@ -13,6 +12,38 @@ const qtyOptions = [
   { text: "8", value: "8" },
   { text: "mehr", value: "more" },
 ];
+
+const TIME_OPTIONS = {
+  saturday: [
+    { label: "16:00", value: "16:00", outlined: false, color: brandColor },
+    { label: "17:00", value: "17:00", outlined: true, color: "grey" },
+    { label: "18:00", value: "18:00", outlined: true, color: "grey" },
+    { label: "19:00", value: "19:00", outlined: true, color: "grey" },
+    { label: "20:00", value: "20:00", outlined: true, color: "grey" },
+    { label: "21:00", value: "21:00", outlined: true, color: "grey" },
+    { label: "22:00", value: "22:00", outlined: true, color: "grey" },
+  ],
+  sunday: [
+    { label: "13:00", value: "13:00", outlined: false, color: brandColor },
+    { label: "14:00", value: "14:00", outlined: true, color: "grey" },
+    { label: "15:00", value: "15:00", outlined: true, color: "grey" },
+    { label: "16:00", value: "16:00", outlined: true, color: "grey" },
+    { label: "17:00", value: "17:00", outlined: true, color: "grey" },
+    { label: "18:00", value: "18:00", outlined: true, color: "grey" },
+    { label: "19:00", value: "19:00", outlined: true, color: "grey" },
+    { label: "20:00", value: "20:00", outlined: true, color: "grey" },
+    { label: "21:00", value: "21:00", outlined: true, color: "grey" },
+    { label: "22:00", value: "22:00", outlined: true, color: "grey" },
+  ],
+  default: [
+    { label: "17:00", value: "17:00", outlined: false, color: brandColor },
+    { label: "18:00", value: "18:00", outlined: true, color: "grey" },
+    { label: "19:00", value: "19:00", outlined: true, color: "grey" },
+    { label: "20:00", value: "20:00", outlined: true, color: "grey" },
+    { label: "21:00", value: "21:00", outlined: true, color: "grey" },
+    { label: "22:00", value: "22:00", outlined: true, color: "grey" },
+  ],
+};
 
 const timeItems = {
   saturday: {
@@ -81,16 +112,4 @@ const timeItems = {
   },
 };
 
-const availability = {
-  saturday: {
-    start: 1600,
-  },
-  sunday: {
-    start: 1300,
-  },
-  default: {
-    start: 1700,
-  },
-};
-
-export { brandColor, dateFormat, timeItems, availability, qtyOptions };
+export { brandColor, dateFormat, TIME_OPTIONS, timeItems, qtyOptions };

@@ -21,14 +21,13 @@
           >+491785272501</a>
         </v-alert>
       </v-col>
+
       <!-- date section -->
       <v-col cols="12" sm="6" md="12" v-if="computedHideForm">
-        <!-- test dt -->
         <v-menu
           ref="menu"
-          :close-on-content-click="false"
           v-model="menu"
-          :nudge-right="40"
+          :close-on-content-click="false"
           :return-value.sync="date"
           transition="scale-transition"
           offset-y
@@ -36,29 +35,45 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              slot="activator"
-              v-model="date"
-              label="Picker without buttons"
+              v-model="getDateFormatted"
+              label="Datum auswählen"
+              :color="brandColor"
               prepend-icon="mdi-calendar"
+              readonly
               v-bind="attrs"
               v-on="on"
             ></v-text-field>
           </template>
-          <v-date-picker v-model="date" @input="$refs.menu.save(date);"></v-date-picker>
+          <v-date-picker
+            v-model="date"
+            @click="menu = false"
+            @input="$refs.menu.save(date)"
+            :min="startDate"
+            :max="getEndDate"
+            :allowed-dates="allowedDates"
+            @update:picker-date="pickerUpdate($event)"
+            :color="brandColor"
+            first-day-of-week="1"
+            locale="de-de"
+            no-title
+          ></v-date-picker>
         </v-menu>
       </v-col>
 
       <!-- time section -->
       <v-col cols="12" sm="6" md="12">
-        Time: {{time}}
-        <div v-for="timeItem in timeItems" :key="timeItem.value">
+        <div>
+          <v-icon>mdi-clock</v-icon>
+          <span class="clock">Uhrzeit auswählen {{time}}</span>
+        </div>
+        <div v-for="opt in getTimeOptions" :key="opt.value">
           <v-btn
             rounded
-            :color="timeItem.color"
+            :color="opt.color"
             dark
-            :outlined="timeItem.outlined"
-            @click="updateTime(timeItem)"
-          >{{timeItem.name}}</v-btn>
+            :outlined="opt.outlined"
+            @click="updateTime(opt)"
+          >{{opt.label}}</v-btn>
         </div>
       </v-col>
       <!-- time section backup
@@ -105,47 +120,12 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import moment from "moment";
 import DevSystem from "@/components/DevSystem.vue";
 
-import {
-  brandColor,
-  dateFormat,
-  timeItems,
-  qtyOptions,
-  availability
-} from "@/shared/constants";
+import { brandColor, dateFormat, qtyOptions } from "@/shared/constants";
 
 export default {
   name: "ReservationForm",
   components: {
     DevSystem
-  },
-  created: function() {
-    const day = this.getDay;
-    let startTime = "";
-    switch (day) {
-      case 0:
-        startTime = availability.sunday.start;
-        break;
-      case 6:
-        startTime = availability.saturday.start;
-        break;
-
-      default:
-        startTime = availability.default.start;
-        break;
-    }
-    //let val = startTime;
-    let items = [];
-    for (let i = 0; i < 5; i++) {
-      let item = {
-        name: startTime,
-        value: startTime,
-        outlined: false,
-        color: "grey"
-      };
-      items.push(item);
-    }
-    console.log(items);
-    this.updateTimeItemAction(items);
   },
   data() {
     return {
@@ -154,9 +134,6 @@ export default {
       brandColor: brandColor,
       quantityOptions: qtyOptions,
       menu: false,
-      datepickers: "2020-09-12",
-      startDate: this.getStartDate(),
-      endDate: this.getEndDate(),
       availableDates: []
     };
   },
@@ -164,16 +141,10 @@ export default {
     ...mapActions([
       "setQuantityAction",
       "setDateAction",
-      "setDatetimeAction",
-      "setDatepickerAction",
       "setTimeAction",
-      "updateTimeItemAction",
+      "updateTimeOptionsAction",
       "setCustomerFormAction"
     ]),
-    updateTime(timeItem) {
-      this.setTimeAction(timeItem.value);
-      //this.updateTimeItemAction(timeItem);
-    },
     setQuantity(val) {
       this.setQuantityAction(val);
       if (this.quantity === "more") {
@@ -204,35 +175,8 @@ export default {
       this.availableDates = availableDates;
       this.allowedDates();
     },
-    getStartDate: function() {
-      return moment().day() === 0
-        ? moment()
-            .add(2, "d")
-            .format(dateFormat)
-        : moment()
-            .add(1, "d")
-            .format(dateFormat);
-    },
-    getEndDate: function() {
-      return moment()
-        .add(3, "M")
-        .format(dateFormat);
-    },
-    getTimeItems() {
-      let items = {};
-      let key = moment(this.date).day();
-      switch (key) {
-        case 6:
-          items = timeItems.saturday;
-          break;
-        case 0:
-          items = timeItems.sunday;
-          break;
-        default:
-          items = timeItems.default;
-          break;
-      }
-      return items;
+    updateTime(timeOption) {
+      this.setTimeAction(timeOption.value);
     },
     customerPage: function() {
       this.setCustomerFormAction(true);
@@ -244,24 +188,20 @@ export default {
   computed: {
     ...mapState([
       "quantity",
+      "startDate",
       "date",
-      "datepicker",
-      "customerForm",
-      "datetime",
       "time",
-      "timeItems"
+      "timeOptions",
+      "customerForm"
     ]),
-    ...mapGetters(["getDateFormatted", "getDayFormatted"]),
+    ...mapGetters(["getDateFormatted", "getEndDate", "getTimeOptions"]),
 
     date: {
       get: function() {
-        //alert(this.$store.state.globalDate);
         return this.$store.state.date;
       },
       set: function(newValue) {
-        //alert('computed date,set function: ' + newValue);
         this.$store.commit("setDate", newValue);
-        //alert('computed date,set function after commit: ' + this.$store.state.globalDate);
       }
     },
     computedHideForm: function() {
@@ -275,5 +215,8 @@ export default {
 .v-input--selection-controls {
   margin-top: 0px;
   padding-bottom: 0px;
+}
+.clock {
+  margin-left: 8px;
 }
 </style>
