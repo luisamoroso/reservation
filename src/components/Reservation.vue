@@ -238,7 +238,9 @@
                   v-model="email"
                   label="E-mail"
                   :color="brandColor"
+                  :rules="emailRules"
                   hint="Wir schicken Ihnen eine Reservierungsbestätigung zu"
+                  required
                 ></v-text-field>
 
                 <v-textarea
@@ -528,7 +530,6 @@ export default {
         if (token) {
           this.addReservation();
         }
-        this.loading = false;
       }
     },
     addReservation: function() {
@@ -555,10 +556,12 @@ export default {
             this.reservationMessage = false;
             this.errorMessage = true;
           }
+          this.loading = false;
         })
         .catch(error => {
           this.reservationMessage = false;
           this.errorMessage = true;
+          this.loading = false;
           console.log(error);
         });
     },
