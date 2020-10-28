@@ -1,13 +1,13 @@
 <template>
   <v-alert outlined color="grey darken-2">
-    <div class="title">Ihre Reservierung</div>
+    <!-- <div class="title">Ihre Übersicht</div> -->
     <div>
       <b>Anzahl der Personen:</b>
       {{ this.quantity }}
     </div>
     <div>
       <b>Datum:</b>
-      {{this.getDateFormatted}}
+      {{ this.getDateFormatted }}
     </div>
     <div>
       <b>Uhrzeit:</b>

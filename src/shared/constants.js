@@ -1,4 +1,6 @@
 const brandColor = "light-green darken-2";
+const activeColor = "light-green darken-1";
+const inactiveColor = "grey";
 const dateFormat = "YYYY-MM-DD";
 
 const qtyOptions = [
@@ -15,33 +17,53 @@ const qtyOptions = [
 
 const TIME_OPTIONS = {
   saturday: [
-    { label: "16:00", value: "16:00", outlined: false, color: brandColor },
-    { label: "17:00", value: "17:00", outlined: true, color: "grey" },
-    { label: "18:00", value: "18:00", outlined: true, color: "grey" },
-    { label: "19:00", value: "19:00", outlined: true, color: "grey" },
-    { label: "20:00", value: "20:00", outlined: true, color: "grey" },
-    { label: "21:00", value: "21:00", outlined: true, color: "grey" },
-    { label: "22:00", value: "22:00", outlined: true, color: "grey" },
+    { label: "16:00", value: "16:00", outlined: false, color: activeColor },
+    { label: "16:30", value: "16:30", outlined: true, color: inactiveColor },
+    { label: "17:00", value: "17:00", outlined: true, color: inactiveColor },
+    { label: "17:30", value: "17:30", outlined: true, color: inactiveColor },
+    { label: "18:00", value: "18:00", outlined: true, color: inactiveColor },
+    { label: "18:30", value: "18:30", outlined: true, color: inactiveColor },
+    { label: "19:00", value: "19:00", outlined: true, color: inactiveColor },
+    { label: "19:30", value: "19:30", outlined: true, color: inactiveColor },
+    { label: "20:00", value: "20:00", outlined: true, color: inactiveColor },
+    { label: "20:30", value: "20:30", outlined: true, color: inactiveColor },
+    { label: "21:00", value: "21:00", outlined: true, color: inactiveColor },
+    { label: "21:30", value: "21:30", outlined: true, color: inactiveColor },
+    { label: "22:00", value: "22:00", outlined: true, color: inactiveColor },
   ],
   sunday: [
-    { label: "13:00", value: "13:00", outlined: false, color: brandColor },
-    { label: "14:00", value: "14:00", outlined: true, color: "grey" },
-    { label: "15:00", value: "15:00", outlined: true, color: "grey" },
-    { label: "16:00", value: "16:00", outlined: true, color: "grey" },
-    { label: "17:00", value: "17:00", outlined: true, color: "grey" },
-    { label: "18:00", value: "18:00", outlined: true, color: "grey" },
-    { label: "19:00", value: "19:00", outlined: true, color: "grey" },
-    { label: "20:00", value: "20:00", outlined: true, color: "grey" },
-    { label: "21:00", value: "21:00", outlined: true, color: "grey" },
-    { label: "22:00", value: "22:00", outlined: true, color: "grey" },
+    { label: "13:00", value: "13:00", outlined: false, color: activeColor },
+    { label: "13:30", value: "13:30", outlined: true, color: inactiveColor },
+    { label: "14:00", value: "14:00", outlined: true, color: inactiveColor },
+    { label: "14:30", value: "14:30", outlined: true, color: inactiveColor },
+    { label: "15:00", value: "15:00", outlined: true, color: inactiveColor },
+    { label: "15:30", value: "15:30", outlined: true, color: inactiveColor },
+    { label: "16:00", value: "16:00", outlined: true, color: inactiveColor },
+    { label: "16:30", value: "16:30", outlined: true, color: inactiveColor },
+    { label: "17:00", value: "17:00", outlined: true, color: inactiveColor },
+    { label: "17:30", value: "17:30", outlined: true, color: inactiveColor },
+    { label: "18:00", value: "18:00", outlined: true, color: inactiveColor },
+    { label: "18:30", value: "18:30", outlined: true, color: inactiveColor },
+    { label: "19:00", value: "19:00", outlined: true, color: inactiveColor },
+    { label: "19:30", value: "19:30", outlined: true, color: inactiveColor },
+    { label: "20:00", value: "20:00", outlined: true, color: inactiveColor },
+    { label: "20:30", value: "20:30", outlined: true, color: inactiveColor },
+    { label: "21:00", value: "21:00", outlined: true, color: inactiveColor },
+    { label: "21:30", value: "21:30", outlined: true, color: inactiveColor },
+    { label: "22:00", value: "22:00", outlined: true, color: inactiveColor },
   ],
   default: [
-    { label: "17:00", value: "17:00", outlined: false, color: brandColor },
-    { label: "18:00", value: "18:00", outlined: true, color: "grey" },
-    { label: "19:00", value: "19:00", outlined: true, color: "grey" },
-    { label: "20:00", value: "20:00", outlined: true, color: "grey" },
-    { label: "21:00", value: "21:00", outlined: true, color: "grey" },
-    { label: "22:00", value: "22:00", outlined: true, color: "grey" },
+    { label: "17:00", value: "17:00", outlined: false, color: activeColor },
+    { label: "17:30", value: "17:30", outlined: true, color: inactiveColor },
+    { label: "18:00", value: "18:00", outlined: true, color: inactiveColor },
+    { label: "18:30", value: "18:30", outlined: true, color: inactiveColor },
+    { label: "19:00", value: "19:00", outlined: true, color: inactiveColor },
+    { label: "19:30", value: "19:30", outlined: true, color: inactiveColor },
+    { label: "20:00", value: "20:00", outlined: true, color: inactiveColor },
+    { label: "20:30", value: "20:30", outlined: true, color: inactiveColor },
+    { label: "21:00", value: "21:00", outlined: true, color: inactiveColor },
+    { label: "21:30", value: "21:30", outlined: true, color: inactiveColor },
+    { label: "22:00", value: "22:00", outlined: true, color: inactiveColor },
   ],
 };
 
@@ -112,4 +134,12 @@ const timeItems = {
   },
 };
 
-export { brandColor, dateFormat, TIME_OPTIONS, timeItems, qtyOptions };
+export {
+  brandColor,
+  activeColor,
+  inactiveColor,
+  dateFormat,
+  TIME_OPTIONS,
+  timeItems,
+  qtyOptions,
+};

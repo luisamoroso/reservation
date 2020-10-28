@@ -2,12 +2,18 @@ import Vue from "vue";
 import Vuex from "vuex";
 import moment from "moment";
 
-import { dateFormat, TIME_OPTIONS } from "@/shared/constants";
+import {
+  dateFormat,
+  TIME_OPTIONS,
+  activeColor,
+  inactiveColor,
+} from "@/shared/constants";
 
 import {
   SET_QUANTITY,
   SET_DATE,
   SET_TIME,
+  SET_TIME_OPTIONS,
   UPDATE_TIME_OPTIONS,
   SET_CUSTOMER_FORM,
   SET_CONFIRMATION_PAGE,
@@ -25,8 +31,8 @@ const state = {
   quantity: "2",
   startDate: initializeDate(),
   date: initializeDate(),
-  time: initializeTime(),
-  timeOptions: TIME_OPTIONS,
+  time: initializeTime(initializeTimeOptions(initializeDate())),
+  timeOptions: initializeTimeOptions(initializeDate()),
   customerForm: false,
   confirmationPage: false,
   salutation: "Herr",
@@ -37,19 +43,52 @@ const state = {
   comment: "",
 };
 const mutations = {
-  [SET_QUANTITY](state, payload) {
-    state.quantity = payload;
+  [SET_QUANTITY](state, newQuantity) {
+    state.quantity = newQuantity;
   },
-  [SET_DATE](state, payload) {
-    state.date = payload;
+  [SET_DATE](state, newDate) {
+    state.date = newDate;
   },
-  [SET_TIME](state, payload) {
-    state.time = payload;
+  [SET_TIME](state, newTime) {
+    state.time = newTime;
   },
-  [UPDATE_TIME_OPTIONS](state, payload) {
-    console.log(payload);
-
-    //state.timeOptions = payload;
+  [SET_TIME_OPTIONS](state) {
+    const day = moment(state.date).day();
+    let timeOpt = {};
+    switch (day) {
+      case 6: // Saturday
+        state.timeOptions = [...TIME_OPTIONS.saturday];
+        timeOpt = TIME_OPTIONS.saturday[0];
+        refreshTimeOptions(state, timeOpt);
+        state.time = timeOpt.value;
+        break;
+      case 0: // Sunday
+        state.timeOptions = [...TIME_OPTIONS.sunday];
+        //  state.time = TIME_OPTIONS.sunday[0].value;
+        timeOpt = TIME_OPTIONS.sunday[0];
+        refreshTimeOptions(state, timeOpt);
+        state.time = timeOpt.value;
+        break;
+      default:
+        // Mon-Fri
+        state.timeOptions = [...TIME_OPTIONS.default];
+        // state.time = TIME_OPTIONS.default[0].value;
+        timeOpt = TIME_OPTIONS.default[0];
+        refreshTimeOptions(state, timeOpt);
+        state.time = timeOpt.value;
+        break;
+    }
+  },
+  [UPDATE_TIME_OPTIONS](state, newTimeOption) {
+    state.timeOptions.map((opt) => {
+      if (opt.value === newTimeOption.value) {
+        opt.color = activeColor;
+        opt.outlined = false;
+      } else {
+        opt.color = inactiveColor;
+        opt.outlined = true;
+      }
+    });
   },
   [SET_CUSTOMER_FORM](state, payload) {
     state.customerForm = payload;
@@ -80,11 +119,14 @@ const actions = {
   setQuantityAction({ commit }, payload) {
     commit(SET_QUANTITY, payload);
   },
-  setDateAction({ commit }, payload) {
-    commit(SET_DATE, payload);
+  setDateAction({ commit }, newDate) {
+    commit(SET_DATE, newDate);
   },
   setTimeAction({ commit }, payload) {
     commit(SET_TIME, payload);
+  },
+  setTimeOptionsAction({ commit }) {
+    commit(SET_TIME_OPTIONS);
   },
   updateTimeOptionsAction({ commit }, timeOption) {
     commit(UPDATE_TIME_OPTIONS, timeOption);
@@ -123,26 +165,19 @@ const getters = {
   getDateFormatted: (state) => {
     return moment(state.date).format("DD.MM.YYYY");
   },
-  getTimeOptions: (state) => {
-    let options = [];
-    const day = moment(state.date).day();
-    switch (day) {
-      case 6:
-        options = TIME_OPTIONS.saturday;
-        // state.time = TIME_OPTIONS.saturday[0].value;
-        break;
-      case 0:
-        options = TIME_OPTIONS.sunday;
-        // state.time = TIME_OPTIONS.sunday[0].value;
-        break;
-      default:
-        options = TIME_OPTIONS.default;
-        // state.time = TIME_OPTIONS.default[0].value;
-        break;
-    }
-    return options;
-  },
 };
+
+function refreshTimeOptions(state, timeOpt) {
+  state.timeOptions.map((opt) => {
+    if (opt.value === timeOpt.value) {
+      opt.color = activeColor;
+      opt.outlined = false;
+    } else {
+      opt.color = inactiveColor;
+      opt.outlined = true;
+    }
+  });
+}
 
 function initializeDate() {
   const day = moment().day();
@@ -155,23 +190,25 @@ function initializeDate() {
         .format(dateFormat);
 }
 
-function initializeTime() {
-  const day = moment(initializeDate()).day();
-  let time = "";
+function initializeTime(timeOptions) {
+  return timeOptions[0].value;
+}
+
+function initializeTimeOptions(date) {
+  let options = [];
+  const day = moment(date).day();
   switch (day) {
     case 6:
-      time = TIME_OPTIONS.saturday[0].value;
+      options = TIME_OPTIONS.saturday;
       break;
     case 0:
-      time = TIME_OPTIONS.sunday[0].value;
+      options = TIME_OPTIONS.sunday;
       break;
     default:
-      time = TIME_OPTIONS.default[0].value;
+      options = TIME_OPTIONS.default;
       break;
   }
-  console.log("initializeTime -> time", time);
-
-  return time;
+  return options;
 }
 
 export default new Vuex.Store({

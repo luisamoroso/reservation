@@ -1,6 +1,7 @@
 export const SET_QUANTITY = "setQuantity";
 export const SET_DATE = "setDate";
 export const SET_TIME = "setTime";
+export const SET_TIME_OPTIONS = "setTimeOptions";
 export const UPDATE_TIME_OPTIONS = "updateTimeOptions";
 export const SET_CUSTOMER_FORM = "setCustomerForm";
 export const SET_CONFIRMATION_PAGE = "setConfirmationPage";

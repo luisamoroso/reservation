@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DevSystem />
+    <!-- <DevSystem /> -->
     <v-row>
       <!-- quantity section -->
       <v-col cols="12" sm="6" md="12">
@@ -13,12 +13,17 @@
           :color="brandColor"
           prepend-icon="mdi-account-multiple"
         ></v-select>
-        <v-alert v-if="!computedHideForm" text dense color="teal" icon="mdi-phone" border="left">
-          Bei Reservierungen über 8 Personen kontaktieren Sie uns bitte telefonisch oder per WhatsApp unter der Nummer
-          <a
-            class="font-weight-bold"
-            href="tel:+491785272501"
-          >+491785272501</a>
+        <v-alert
+          v-if="!computedHideForm"
+          text
+          dense
+          color="teal"
+          icon="mdi-phone"
+          border="left"
+        >
+          Bei Reservierungen über 8 Personen kontaktieren Sie uns bitte
+          telefonisch oder per WhatsApp unter der Nummer
+          <a class="font-weight-bold" href="tel:+491785272501">+491785272501</a>
         </v-alert>
       </v-col>
 
@@ -61,19 +66,23 @@
       </v-col>
 
       <!-- time section -->
-      <v-col cols="12" sm="6" md="12">
+      <v-col cols="12" sm="6" md="12" v-if="computedHideForm">
         <div>
           <v-icon>mdi-clock</v-icon>
-          <span class="clock">Uhrzeit auswählen {{time}}</span>
+          <span class="clock">Uhrzeit auswählen {{ time }}</span>
         </div>
-        <div v-for="opt in getTimeOptions" :key="opt.value">
-          <v-btn
-            rounded
-            :color="opt.color"
-            dark
-            :outlined="opt.outlined"
-            @click="updateTime(opt)"
-          >{{opt.label}}</v-btn>
+        <div class="text-center">
+          <span v-for="timeOption in timeOptions" :key="timeOption.value">
+            <v-btn
+              :color="timeOption.color"
+              :outlined="timeOption.outlined"
+              @click="updateTime(timeOption)"
+              class="time-btn"
+              dark
+              rounded
+              >{{ timeOption.label }}</v-btn
+            >
+          </span>
         </div>
       </v-col>
       <!-- time section backup
@@ -118,14 +127,14 @@
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import moment from "moment";
-import DevSystem from "@/components/DevSystem.vue";
+//import DevSystem from "@/components/DevSystem.vue";
 
 import { brandColor, dateFormat, qtyOptions } from "@/shared/constants";
 
 export default {
   name: "ReservationForm",
   components: {
-    DevSystem
+    //DevSystem
   },
   data() {
     return {
@@ -142,6 +151,7 @@ export default {
       "setQuantityAction",
       "setDateAction",
       "setTimeAction",
+      "setTimeOptionsAction",
       "updateTimeOptionsAction",
       "setCustomerFormAction"
     ]),
@@ -177,6 +187,7 @@ export default {
     },
     updateTime(timeOption) {
       this.setTimeAction(timeOption.value);
+      this.updateTimeOptionsAction(timeOption);
     },
     customerPage: function() {
       this.setCustomerFormAction(true);
@@ -189,19 +200,22 @@ export default {
     ...mapState([
       "quantity",
       "startDate",
-      "date",
       "time",
       "timeOptions",
       "customerForm"
     ]),
-    ...mapGetters(["getDateFormatted", "getEndDate", "getTimeOptions"]),
+    ...mapGetters(["getDateFormatted", "getEndDate"]),
 
     date: {
       get: function() {
         return this.$store.state.date;
       },
-      set: function(newValue) {
-        this.$store.commit("setDate", newValue);
+      set: function(newDate) {
+        // this.$store.commit("setDate", newDate);
+        if (this.$store.state.date !== newDate) {
+          this.setDateAction(newDate);
+          this.setTimeOptionsAction();
+        }
       }
     },
     computedHideForm: function() {
@@ -218,5 +232,8 @@ export default {
 }
 .clock {
   margin-left: 8px;
+}
+.time-btn {
+  margin: 4px;
 }
 </style>
