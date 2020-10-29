@@ -69,7 +69,7 @@
       <v-col cols="12" sm="6" md="12" v-if="computedHideForm">
         <div>
           <v-icon>mdi-clock</v-icon>
-          <span class="clock">Uhrzeit auswählen {{ time }}</span>
+          <span class="clock">Uhrzeit auswählen: {{ time }}</span>
         </div>
         <div class="text-center">
           <span v-for="timeOption in timeOptions" :key="timeOption.value">
