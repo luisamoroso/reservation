@@ -202,8 +202,10 @@ export default {
 
         if (token) {
           this.addReservation();
+        } else {
+          this.loading = false;
+          this.errorMessage = true;
         }
-        this.loading = false;
       }
     },
     addReservation: function() {
@@ -234,10 +236,12 @@ export default {
           } else {
             this.errorMessage = true;
           }
+          this.loading = false;
         })
         .catch(error => {
           this.errorMessage = true;
           console.log(error);
+          this.loading = false;
         });
     },
     back() {
