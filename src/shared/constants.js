@@ -1,6 +1,6 @@
 const brandColor = "light-green darken-2";
 const activeColor = "light-green darken-1";
-const inactiveColor = "grey";
+const inactiveColor = "grey darken-1";
 const dateFormat = "YYYY-MM-DD";
 
 const qtyOptions = [

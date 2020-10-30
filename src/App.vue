@@ -23,7 +23,7 @@
 
     <v-app-bar app color="light-green darken-2" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title link to="/">Porto Elia Taverna</v-toolbar-title>
+      <v-toolbar-title link to="/">Porto Elia - Reservierung</v-toolbar-title>
     </v-app-bar>
 
     <v-main>

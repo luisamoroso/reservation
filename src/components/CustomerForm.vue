@@ -5,10 +5,10 @@
         <div class="headline">Reservierung abschließen</div>
 
         <!-- Error message -->
-        <v-alert
-          type="error"
-          v-if="this.errorMessage"
-        >Ein Fehler ist aufgetretten. Bitte versuchen Sie es später erneut!</v-alert>
+        <v-alert type="error" v-if="this.errorMessage"
+          >Ein Fehler ist aufgetretten. Bitte versuchen Sie es später
+          erneut!</v-alert
+        >
 
         <!-- Customer form-->
         <v-form ref="form" v-model="valid">
@@ -16,7 +16,7 @@
             @input="setSalutationAction"
             :items="salutationItems"
             :value="salutation"
-            :rules="[(v) => !!v || 'Bitte wählen Sie eine Anrede aus']"
+            :rules="[v => !!v || 'Bitte wählen Sie eine Anrede aus']"
             label="Anrede"
             required
             :color="brandColor"
@@ -74,7 +74,12 @@
             maxlength="150"
           ></v-textarea>
 
-          <v-checkbox v-model="privacy" :rules="[(v) => !!v || '']" required :color="brandColor">
+          <v-checkbox
+            v-model="privacy"
+            :rules="[v => !!v || '']"
+            required
+            :color="brandColor"
+          >
             <template v-slot:label>
               <div>
                 Ich stimme den
@@ -85,10 +90,11 @@
                       href="https://www.porto-elia.net/impressum/"
                       @click.stop
                       v-on="on"
-                    >allgemeinen Geschäftsbedingungen</a>
+                      >allgemeinen Geschäftsbedingungen</a
+                    >
                   </template>
-                  Opens in new window
-                </v-tooltip>&nbsp;und den
+                  Opens in new window </v-tooltip
+                >&nbsp;und den
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <a
@@ -96,15 +102,22 @@
                       href="https://www.porto-elia.net/j/privacy"
                       @click.stop
                       v-on="on"
-                    >Datenschutzrichtlinien</a>
+                      >Datenschutzrichtlinien</a
+                    >
                   </template>
-                  Opens in new window
-                </v-tooltip>&nbsp;zu.
+                  Opens in new window </v-tooltip
+                >&nbsp;zu.
               </div>
             </template>
           </v-checkbox>
           <v-row justify="space-around">
-            <v-btn color="amber" x-large @click="submit" :loading="loading" :disabled="loading">
+            <v-btn
+              color="amber"
+              x-large
+              @click="submit"
+              :loading="loading"
+              :disabled="loading"
+            >
               <span class="white--text">Jetz reservieren</span>
             </v-btn>
           </v-row>
@@ -120,7 +133,7 @@
 </template>
 
 <script>
-//import axios from "axios";
+import axios from "axios";
 
 import { brandColor } from "@/shared/constants";
 import { mapState, mapActions } from "vuex";
@@ -206,22 +219,17 @@ export default {
         comment: this.comment,
         privacy: this.privacy
       };
-      console.log(data);
-      this.setConfirmationPageAction(true);
-      this.$router.push({
-        name: "Confirmation"
-      });
+      // console.log(data);
 
-      /*
       axios
         .post("index.php/home/reservation", data)
         .then(response => {
           const data = response.data;
           if (data.success) {
             this.errorMessage = false;
+            this.setConfirmationPageAction(true);
             this.$router.push({
-              name: "Confirmation",
-              params: { confirmation: true }
+              name: "Confirmation"
             });
           } else {
             this.errorMessage = true;
@@ -230,7 +238,7 @@ export default {
         .catch(error => {
           this.errorMessage = true;
           console.log(error);
-        });*/
+        });
     },
     back() {
       this.setCustomerFormAction(false);

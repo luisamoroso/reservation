@@ -1,16 +1,30 @@
 <template>
   <v-alert outlined color="grey darken-2">
-    <!-- <div class="title">Ihre Übersicht</div> -->
+    <div class="title">Ihre Übersicht</div>
     <div>
-      <b>Anzahl der Personen:</b>
+      <b>
+        <v-icon>
+          mdi-account-multiple
+        </v-icon></b
+      >
       {{ this.quantity }}
+      <span v-if="this.quantity > 1"> Personen</span>
+      <span v-else> Person</span>
     </div>
     <div>
-      <b>Datum:</b>
+      <b
+        ><v-icon>
+          mdi-calendar
+        </v-icon></b
+      >
       {{ this.getDateFormatted }}
     </div>
     <div>
-      <b>Uhrzeit:</b>
+      <b
+        ><v-icon>
+          mdi-clock
+        </v-icon></b
+      >
       {{ this.time }}
     </div>
   </v-alert>
