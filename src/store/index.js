@@ -180,12 +180,12 @@ function refreshTimeOptions(state, timeOpt) {
 }
 
 function initializeDate() {
-  const day = moment().day();
+  const day = moment("2020-12-01").day();
   return day === 1
-    ? moment()
+    ? moment("2020-11-30")
         .add(2, "d")
         .format(dateFormat)
-    : moment()
+    : moment("2020-11-30")
         .add(1, "d")
         .format(dateFormat);
 }
