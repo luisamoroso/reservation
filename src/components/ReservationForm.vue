@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- <DevSystem /> -->
-    <v-row>
+    <CoronaInfo v-show="corona" />
+    <v-row v-show="!corona">
       <!-- quantity section -->
       <v-col cols="12" sm="6" md="12">
         <v-select
@@ -87,7 +88,7 @@
     </v-row>
 
     <!-- Weiter button -->
-    <v-row v-if="computedHideForm">
+    <v-row v-show="!corona" v-if="computedHideForm">
       <v-col align="center">
         <v-btn :color="brandColor" @click="customerPage()" x-large dark>
           Weiter
@@ -101,6 +102,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import moment from "moment";
+import CoronaInfo from "@/components/CoronaInfo.vue";
 //import DevSystem from "@/components/DevSystem.vue";
 
 import { brandColor, qtyOptions } from "@/shared/constants";
@@ -108,7 +110,8 @@ import { brandColor, qtyOptions } from "@/shared/constants";
 export default {
   name: "ReservationForm",
   components: {
-    //DevSystem
+    //DevSystem,
+    CoronaInfo,
   },
   data() {
     return {
@@ -117,7 +120,8 @@ export default {
       brandColor: brandColor,
       quantityOptions: qtyOptions,
       menu: false,
-      availableDates: []
+      availableDates: [],
+      corona: false,
     };
   },
   methods: {
@@ -127,7 +131,7 @@ export default {
       "setTimeAction",
       "setTimeOptionsAction",
       "updateTimeOptionsAction",
-      "setCustomerFormAction"
+      "setCustomerFormAction",
     ]),
     setQuantity(val) {
       this.setQuantityAction(val);
@@ -135,19 +139,19 @@ export default {
         this.setCustomerFormAction(false);
       }
     },
-    allowedDates: function(val) {
+    allowedDates: function (val) {
       return moment(val).day() !== 1 ? moment(val).format("D") : 0; //Allow all days except mondays
     },
     updateTime(timeOption) {
       this.setTimeAction(timeOption.value);
       this.updateTimeOptionsAction(timeOption);
     },
-    customerPage: function() {
+    customerPage: function () {
       this.setCustomerFormAction(true);
       this.$router.push({
-        name: "Reservation"
+        name: "Reservation",
       });
-    }
+    },
   },
   computed: {
     ...mapState([
@@ -155,26 +159,26 @@ export default {
       "startDate",
       "time",
       "timeOptions",
-      "customerForm"
+      "customerForm",
     ]),
     ...mapGetters(["getDateFormatted", "getEndDate"]),
 
     date: {
-      get: function() {
+      get: function () {
         return this.$store.state.date;
       },
-      set: function(newDate) {
+      set: function (newDate) {
         // this.$store.commit("setDate", newDate);
         if (this.$store.state.date !== newDate) {
           this.setDateAction(newDate);
           this.setTimeOptionsAction();
         }
-      }
+      },
     },
-    computedHideForm: function() {
+    computedHideForm: function () {
       return this.quantity !== "more";
-    }
-  }
+    },
+  },
 };
 </script>
 

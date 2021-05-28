@@ -180,14 +180,16 @@ function refreshTimeOptions(state, timeOpt) {
 }
 
 function initializeDate() {
-  const day = moment("2020-12-01").day();
-  return day === 1
-    ? moment("2020-11-30")
-        .add(2, "d")
-        .format(dateFormat)
-    : moment("2020-11-30")
-        .add(1, "d")
-        .format(dateFormat);
+  let currentDate = moment()
+    .add(1, "d")
+    .format(dateFormat);
+  const day = moment(currentDate).day();
+  if (day === 1) {
+    currentDate = moment(currentDate)
+      .add(1, "d")
+      .format(dateFormat);
+  }
+  return currentDate;
 }
 
 function initializeTime(timeOptions) {
