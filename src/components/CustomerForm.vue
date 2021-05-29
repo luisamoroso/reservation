@@ -16,7 +16,7 @@
             @input="setSalutationAction"
             :items="salutationItems"
             :value="salutation"
-            :rules="[v => !!v || 'Bitte wählen Sie eine Anrede aus']"
+            :rules="[(v) => !!v || 'Bitte wählen Sie eine Anrede aus']"
             label="Anrede"
             required
             :color="brandColor"
@@ -27,7 +27,7 @@
             :value="firstname"
             :counter="50"
             :rules="nameRules"
-            label="Vorname"
+            label="Vorname *"
             required
             :color="brandColor"
           ></v-text-field>
@@ -37,7 +37,7 @@
             :value="lastname"
             :counter="50"
             :rules="nameRules"
-            label="Nachname"
+            label="Nachname *"
             required
             :color="brandColor"
           ></v-text-field>
@@ -45,7 +45,7 @@
           <v-text-field
             @input="setTelephoneAction"
             :value="telephone"
-            label="Telefon"
+            label="Telefon *"
             type="tel"
             required
             :rules="telephoneRules"
@@ -56,7 +56,7 @@
             @input="setEmailAction"
             :value="email"
             :rules="emailRules"
-            label="E-mail"
+            label="E-mail *"
             required
             :color="brandColor"
             hint="Wir schicken Ihnen eine Reservierungsbestätigung zu"
@@ -76,7 +76,7 @@
 
           <v-checkbox
             v-model="privacy"
-            :rules="[v => !!v || '']"
+            :rules="[(v) => !!v || '']"
             required
             :color="brandColor"
           >
@@ -146,25 +146,25 @@ export default {
       valid: true,
       salutationItems: ["Herr", "Frau"],
       nameRules: [
-        v => !!v || "Bitte geben Sie einen Namen ein",
-        v => (v && v.length <= 50) || "Der Name ist zu lang"
+        (v) => !!v || "Bitte geben Sie einen Namen ein",
+        (v) => (v && v.length <= 50) || "Der Name ist zu lang",
       ],
       telephoneRules: [
-        v => !!v || "Bitte geben Sie eine Telefonnummer ein",
-        v =>
+        (v) => !!v || "Bitte geben Sie eine Telefonnummer ein",
+        (v) =>
           (v && v.length > 5) ||
           "Bitte geben Sie eine gültige Telefonnummer ein",
-        v =>
+        (v) =>
           (v && v.length < 20) ||
-          "Bitte geben Sie eine gültige Telefonnummer ein"
+          "Bitte geben Sie eine gültige Telefonnummer ein",
       ],
       emailRules: [
-        v => !!v || "Bitte geben Sie eine E-mail Adresse ein",
-        v => /.+@.+\..+/.test(v) || "Bitte geben Sie eine E-mail Adresse ein"
+        (v) => !!v || "Bitte geben Sie eine E-mail Adresse ein",
+        (v) => /.+@.+\..+/.test(v) || "Bitte geben Sie eine E-mail Adresse ein",
       ],
       privacy: false,
       errorMessage: false,
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -178,8 +178,8 @@ export default {
       "telephone",
       "email",
       "comment",
-      "confirmationPage"
-    ])
+      "confirmationPage",
+    ]),
   },
   methods: {
     ...mapActions([
@@ -190,7 +190,7 @@ export default {
       "setEmailAction",
       "setCommentAction",
       "setConfirmationPageAction",
-      "setCustomerFormAction"
+      "setCustomerFormAction",
     ]),
     async submit() {
       if (this.$refs.form.validate()) {
@@ -208,7 +208,7 @@ export default {
         }
       }
     },
-    addReservation: function() {
+    addReservation: function () {
       const data = {
         quantity: this.quantity,
         date: this.date,
@@ -219,26 +219,26 @@ export default {
         telephone: this.telephone,
         email: this.email,
         comment: this.comment,
-        privacy: this.privacy
+        privacy: this.privacy,
       };
       // console.log(data);
 
       axios
         .post("index.php/home/reservation", data)
-        .then(response => {
+        .then((response) => {
           const data = response.data;
           if (data.success) {
             this.errorMessage = false;
             this.setConfirmationPageAction(true);
             this.$router.push({
-              name: "Confirmation"
+              name: "Confirmation",
             });
           } else {
             this.errorMessage = true;
           }
           this.loading = false;
         })
-        .catch(error => {
+        .catch((error) => {
           this.errorMessage = true;
           console.log(error);
           this.loading = false;
@@ -247,7 +247,7 @@ export default {
     back() {
       this.setCustomerFormAction(false);
       this.$router.back();
-    }
-  }
+    },
+  },
 };
 </script>
