@@ -3,6 +3,19 @@ const activeColor = "light-green darken-1";
 const inactiveColor = "grey darken-1";
 const dateFormat = "YYYY-MM-DD";
 
+const locationOptions = [
+  {
+    title: "Mediterrane Küche",
+    address: "Obere Waiblingerstr. 153, 70374 Stuttgart",
+    value: "0"
+  },
+  {
+    title: "Meat & Greek",
+    address: "Deckerstr. 51, 70372 Stuttgart",
+    value: "1"
+  },
+];
+
 const qtyOptions = [
   { text: "1", value: "1" },
   { text: "2", value: "2" },
@@ -146,4 +159,5 @@ export {
   TIME_OPTIONS,
   timeItems,
   qtyOptions,
+  locationOptions,
 };

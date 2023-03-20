@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
 import { brandColor } from "@/shared/constants";
 import { mapState, mapActions } from "vuex";
@@ -169,6 +169,7 @@ export default {
   },
   computed: {
     ...mapState([
+      "location",
       "quantity",
       "date",
       "time",
@@ -210,6 +211,7 @@ export default {
     },
     addReservation: function () {
       const data = {
+        location: this.location,
         quantity: this.quantity,
         date: this.date,
         time: this.time,
@@ -221,28 +223,28 @@ export default {
         comment: this.comment,
         privacy: this.privacy,
       };
-      // console.log(data);
+      console.log(data);
 
-      axios
-        .post("index.php/home/reservation", data)
-        .then((response) => {
-          const data = response.data;
-          if (data.success) {
-            this.errorMessage = false;
-            this.setConfirmationPageAction(true);
-            this.$router.push({
-              name: "Confirmation",
-            });
-          } else {
-            this.errorMessage = true;
-          }
-          this.loading = false;
-        })
-        .catch((error) => {
-          this.errorMessage = true;
-          console.log(error);
-          this.loading = false;
-        });
+      // axios
+      //   .post("index.php/home/reservation", data)
+      //   .then((response) => {
+      //     const data = response.data;
+      //     if (data.success) {
+      //       this.errorMessage = false;
+      //       this.setConfirmationPageAction(true);
+      //       this.$router.push({
+      //         name: "Confirmation",
+      //       });
+      //     } else {
+      //       this.errorMessage = true;
+      //     }
+      //     this.loading = false;
+      //   })
+      //   .catch((error) => {
+      //     this.errorMessage = true;
+      //     console.log(error);
+      //     this.loading = false;
+      //   });
     },
     back() {
       this.setCustomerFormAction(false);

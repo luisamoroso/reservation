@@ -1,3 +1,4 @@
+export const SET_LOCATION = "setLocation";
 export const SET_QUANTITY = "setQuantity";
 export const SET_DATE = "setDate";
 export const SET_TIME = "setTime";

@@ -3,6 +3,75 @@
     <!-- <DevSystem /> -->
     <CoronaInfo v-show="corona" />
     <v-row v-show="!corona">
+      <!-- location section -->
+      <v-col cols="12" sm="6" md="12">
+        <div>
+          <v-icon>mdi-map-marker-radius</v-icon>
+          <span class="clock">Restaurant auswählen</span>
+        </div>
+
+        <v-container>
+          <v-row dense>
+            <v-col cols="12">
+              <v-card
+                :color="this.location === '0' ? brandColor : defaultColor"
+                :dark="this.location === '0'"
+                @click="setLocation('0')"
+              >
+                <div>
+                  <v-list-item three-line>
+                    <v-list-item-content>
+                      <div class="text-overline mb-4">Taverna</div>
+                      <v-list-item-title class="text-h6 mb-1">
+                        Porto Elia
+
+                        <span>
+                          <v-icon v-if="this.location === '0'" x-large>
+                            mdi-check
+                          </v-icon>
+                        </span>
+                      </v-list-item-title>
+                      <v-list-item-subtitle>{{
+                        locations[0].address
+                      }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </div>
+              </v-card>
+              <br />
+
+              <v-card
+                :color="this.location === '1' ? brandColor : defaultColor"
+                :dark="this.location === '1'"
+                @click="setLocation('1')"
+              >
+                <div>
+                  <v-list-item three-line>
+                    <v-list-item-content>
+                      <div class="text-overline mb-4">Taverna</div>
+                      <v-list-item-title class="text-h6 mb-1">
+                        Porto Elia
+                        <span class="text-subtitle-1">
+                          - {{ locations[1].title }}</span
+                        >
+                        <span>
+                          <v-icon v-if="this.location === '1'" x-large>
+                            mdi-check
+                          </v-icon>
+                        </span>
+                      </v-list-item-title>
+                      <v-list-item-subtitle>{{
+                        locations[1].address
+                      }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+
       <!-- quantity section -->
       <v-col cols="12" sm="6" md="12">
         <v-select
@@ -105,7 +174,7 @@ import moment from "moment";
 import CoronaInfo from "@/components/CoronaInfo.vue";
 //import DevSystem from "@/components/DevSystem.vue";
 
-import { brandColor, qtyOptions } from "@/shared/constants";
+import { brandColor, qtyOptions, locationOptions } from "@/shared/constants";
 
 export default {
   name: "ReservationForm",
@@ -118,6 +187,8 @@ export default {
       timeColor: "grey",
       timeOutlined: true,
       brandColor: brandColor,
+      defaultColor: "white",
+      locations: locationOptions,
       quantityOptions: qtyOptions,
       menu: false,
       availableDates: [],
@@ -126,6 +197,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      "setLocationAction",
       "setQuantityAction",
       "setDateAction",
       "setTimeAction",
@@ -133,6 +205,9 @@ export default {
       "updateTimeOptionsAction",
       "setCustomerFormAction",
     ]),
+    setLocation(location) {
+      this.setLocationAction(location);
+    },
     setQuantity(val) {
       this.setQuantityAction(val);
       if (this.quantity === "more") {
@@ -155,6 +230,7 @@ export default {
   },
   computed: {
     ...mapState([
+      "location",
       "quantity",
       "startDate",
       "time",
@@ -189,6 +265,9 @@ export default {
 }
 .clock {
   margin-left: 8px;
+}
+.location-box {
+  margin-left: 30px;
 }
 .time-btn {
   margin: 4px;

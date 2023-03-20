@@ -10,6 +10,7 @@ import {
 } from "@/shared/constants";
 
 import {
+  SET_LOCATION,
   SET_QUANTITY,
   SET_DATE,
   SET_TIME,
@@ -28,6 +29,7 @@ import {
 Vue.use(Vuex);
 
 const state = {
+  location: "0",
   quantity: "2",
   startDate: initializeDate(),
   date: initializeDate(),
@@ -43,6 +45,9 @@ const state = {
   comment: "",
 };
 const mutations = {
+  [SET_LOCATION](state, newLocation) {
+    state.location = newLocation;
+  },
   [SET_QUANTITY](state, newQuantity) {
     state.quantity = newQuantity;
   },
@@ -116,6 +121,9 @@ const mutations = {
   },
 };
 const actions = {
+  setLocationAction({ commit }, payload) {
+    commit(SET_LOCATION, payload);
+  },
   setQuantityAction({ commit }, payload) {
     commit(SET_QUANTITY, payload);
   },
