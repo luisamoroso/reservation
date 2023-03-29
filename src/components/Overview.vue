@@ -3,11 +3,11 @@
     <div class="title">Ihre Übersicht</div>
     <div>
       <b> <v-icon> mdi-map-marker-radius </v-icon></b>
-      <span v-if="this.location === '0'"
-        >Taverna Porto Elia ({{ locations[0].address }})</span
+      <span v-if="this.location === 'RESTAURANT'"
+        >Restaurant Porto Elia ({{ locations[0].address }})</span
       >
       <span v-else
-        >Taverna Porto Elia - {{ locations[1].title }} ({{
+        >Taverne Porto Elia - {{ locations[1].title }} ({{
           locations[1].address
         }})</span
       >

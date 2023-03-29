@@ -7,12 +7,12 @@ const locationOptions = [
   {
     title: "Mediterrane Küche",
     address: "Obere Waiblingerstr. 153, 70374 Stuttgart",
-    value: "0"
+    value: "RESTAURANT"
   },
   {
     title: "Meat & Greek",
     address: "Deckerstr. 51, 70372 Stuttgart",
-    value: "1"
+    value: "TAVERNE"
   },
 ];
 

@@ -14,19 +14,21 @@
           <v-row dense>
             <v-col cols="12">
               <v-card
-                :color="this.location === '0' ? brandColor : defaultColor"
-                :dark="this.location === '0'"
-                @click="setLocation('0')"
+                :color="
+                  this.location === 'RESTAURANT' ? brandColor : defaultColor
+                "
+                :dark="this.location === 'RESTAURANT'"
+                @click="setLocation('RESTAURANT')"
               >
                 <div>
                   <v-list-item three-line>
                     <v-list-item-content>
-                      <div class="text-overline mb-4">Taverna</div>
+                      <div class="text-overline mb-4">Restaurant</div>
                       <v-list-item-title class="text-h6 mb-1">
                         Porto Elia
 
                         <span>
-                          <v-icon v-if="this.location === '0'" x-large>
+                          <v-icon v-if="this.location === 'RESTAURANT'" x-large>
                             mdi-check
                           </v-icon>
                         </span>
@@ -41,21 +43,33 @@
               <br />
 
               <v-card
-                :color="this.location === '1' ? brandColor : defaultColor"
-                :dark="this.location === '1'"
-                @click="setLocation('1')"
+                :color="this.location === 'TAVERNE' ? brandColor : defaultColor"
+                :dark="this.location === 'TAVERNE'"
+                @click="setLocation('TAVERNE')"
               >
                 <div>
                   <v-list-item three-line>
                     <v-list-item-content>
-                      <div class="text-overline mb-4">Taverna</div>
+                      <div class="text-overline mb-4">
+                        Taverne
+                        <span
+                          ><v-chip
+                            class="ma-2"
+                            color="amber"
+                            text-color="white"
+                          >
+                            <i>++ NEU ++</i>
+                          </v-chip></span
+                        >
+                      </div>
+
                       <v-list-item-title class="text-h6 mb-1">
                         Porto Elia
                         <span class="text-subtitle-1">
                           - {{ locations[1].title }}</span
                         >
                         <span>
-                          <v-icon v-if="this.location === '1'" x-large>
+                          <v-icon v-if="this.location === 'TAVERNE'" x-large>
                             mdi-check
                           </v-icon>
                         </span>
@@ -63,6 +77,11 @@
                       <v-list-item-subtitle>{{
                         locations[1].address
                       }}</v-list-item-subtitle>
+                      <br />
+                      <v-alert dense type="info">
+                        Reservierungen ab
+                        <strong>Freitag 31.03.2023</strong> möglich
+                      </v-alert>
                     </v-list-item-content>
                   </v-list-item>
                 </div>

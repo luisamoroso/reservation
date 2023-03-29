@@ -29,7 +29,7 @@ import {
 Vue.use(Vuex);
 
 const state = {
-  location: "0",
+  location: "RESTAURANT",
   quantity: "2",
   startDate: initializeDate(),
   date: initializeDate(),
