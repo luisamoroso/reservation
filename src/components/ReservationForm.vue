@@ -160,8 +160,9 @@
           <span class="clock">Uhrzeit auswählen: {{ time }}</span>
         </div>
         <div class="text-center">
-          <span v-for="timeOption in timeOptions" :key="timeOption.value">
+          <span v-for="(timeOption, index) in timeOptions" :key="index">
             <v-btn
+              v-show="timeOption.location === location"
               :color="timeOption.color"
               :outlined="timeOption.outlined"
               @click="updateTime(timeOption)"
@@ -234,7 +235,10 @@ export default {
       }
     },
     allowedDates: function (val) {
-      return moment(val).day() !== 1 ? moment(val).format("D") : 0; //Allow all days except mondays
+      if (this.location === "RESTAURANT") {
+        return moment(val).day() !== 1 ? moment(val).format("D") : 0; //Allow all days except mondays
+      }
+      return moment(val).format("D"); //Allow all days
     },
     updateTime(timeOption) {
       this.setTimeAction(timeOption.value);
