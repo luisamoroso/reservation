@@ -1,6 +1,6 @@
 {
   "name": "reservation-app",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -13,12 +13,14 @@
     "vue": "^2.6.11",
     "vue-recaptcha-v3": "^1.9.0",
     "vue-router": "^3.2.0",
-    "vuetify": "^2.2.11"
+    "vuetify": "^2.2.11",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
     "@vue/cli-plugin-eslint": "~4.4.0",
     "@vue/cli-plugin-router": "^4.4.6",
+    "@vue/cli-plugin-vuex": "^4.5.4",
     "@vue/cli-service": "~4.4.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "axios": "^0.19.2",
