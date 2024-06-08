@@ -7,7 +7,7 @@
       <v-col cols="12" sm="6" md="12">
         <div>
           <v-icon>mdi-map-marker-radius</v-icon>
-          <span class="clock">Restaurant auswählen</span>
+          <span class="clock">Location</span>
         </div>
 
         <v-container>
@@ -46,6 +46,7 @@
                 :color="this.location === 'TAVERNE' ? brandColor : defaultColor"
                 :dark="this.location === 'TAVERNE'"
                 @click="setLocation('TAVERNE')"
+                v-show="false"
               >
                 <div>
                   <v-list-item three-line>
